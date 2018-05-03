@@ -123,7 +123,7 @@ class Schema extends \yii\db\Schema
         if (!is_string($str)) {
             return $str;
         }
-        return "'" . addcslashes(str_replace("'", "''", $str), "\000\n\r\\\032\047") . "'";
+        return "'" . addcslashes($str, "\000\n\r\\\032\047") . "'";
     }
 
     /**
@@ -180,8 +180,12 @@ class Schema extends \yii\db\Schema
         if (preg_match('/^([\w ]+)(?:\(([^\)]+)\))?$/', $column->dbType, $matches)) {
             $type = $matches[1];
             $column->dbType = $matches[1] . (isset($matches[2]) ? "({$matches[2]})" : '');
+
+            // Проверка на Nullable
             if (isset($this->typeMap[$type])) {
                 $column->type = $this->typeMap[$type];
+            } elseif (isset($this->typeMap[$matches[2]])) {
+                $column->type = $this->typeMap[$matches[2]];
             }
         }
 
