@@ -93,7 +93,7 @@ class MigrationDataCommand extends BaseObject
             } elseif (is_string($item) && isset($row[$item])) {
                 $val = $this->castTypeValue($key, $row[$item]);
             } else if (isset($this->_schema->columns[$key])) {
-                $val = $this->castTypeValue($key, $item);
+                $val = '\N';
             }
             $out[$key] = $val;
         }
